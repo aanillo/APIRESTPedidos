@@ -9,9 +9,11 @@
 ### Desarrollo Web en el Entorno del Servidor
 
 
-## Idea de la API REST:
+## Nombre del proyecto:
+API REST Pedidos
 
-#### Idea:
+
+## Idea de la API REST:
 
 La API REST va a consistir en gestionar un sistema de reparto de pedidos online. 
 Los usuarios podrán hacer un seguimiento de los pedidos en curso, consultando sus datos, así como consultar el historial de los pedidos ya realizados.
@@ -19,63 +21,71 @@ La aplicación se implementará en el lado del servidor.
 Las tablas que van a conformar la aplicación son Usuario, Producto y Pedido.
 
 
+## Justificación del proyecto
+
+He escogido el tema de un sistema basado en una gestión de pedidos online porque el comercio online está muy a la orden del día, superando incluso a las compras presenciales en determinadas fechas del año. Bajo mi punto de vista, la idea de un proyecto debe basarse en un tema con impacto en la actualidad.
+
+Una página web que ofrezca un funcionamiento correcto del estado de los pedidos es esencial para las empresas que ofrecen este tipo de servicios. Considero muy importante que los clientes puedan tener acceso con facilidad tanto a los datos de sus pedidos en línea como al historial.
 
 
-#### Tablas:
 
-Usuario: se almacenarán los usuarios registrados en el sistema y que van a poder realizar los pedidos y las operaciones de consulta.
+## Tablas:
 
-Producto: almacenará los datos de los productos existentes en la Base de Datos, que serán los que estarán a la venta.
+**Usuario:** se almacenarán los usuarios registrados en el sistema y que van a poder realizar los pedidos y las operaciones de consulta.
 
-Pedido: poseerá los datos referentes a los pedidos de productos realizados por los usuarios.
+**Producto:** almacenará los datos de los productos existentes en la Base de Datos, que serán los que estarán a la venta.
+
+**Pedido:** poseerá los datos referentes a los pedidos de productos realizados por los usuarios.
 
 
 
 #### Campos y tipo de datos:
 
-Tabla Usuario:
+**Tabla Usuario:**
 
-Identificador de usuario: dato numérico tipo Long. Se generará automáticamente al crear un usuario. No puede ser nulo.  
+- Identificador de usuario: dato numérico tipo Long. Se generará automáticamente al crear un usuario. No puede ser nulo.  
 
-Username: cadena de texto. Nombre del usuario. No puede ser nulo ni tener menos de 4 caracteres.
+- Username: cadena de texto. Nombre del usuario. No puede ser nulo ni tener menos de 4 caracteres.
 
-Password: cadena de texto. Contraseña del usuario. No puede ser nulo y debe tener un carácter numérico y uno especial, al menos.
+- Password: cadena de texto. Contraseña del usuario. No puede ser nulo y debe tener un carácter numérico y uno especial, al menos.
 
-Email: cadena de texto. Correo del usuario. No puede ser nulo. Además, deberá contener “@” y acabar en “.es” o “.com”.
+- Email: cadena de texto. Correo del usuario. No puede ser nulo. Además, deberá contener “@” y acabar en “.es” o “.com”.
 
-Teléfono: dato numérico de tipo Int. No puede ser nulo y debe contener 9 números.
+- Teléfono: dato numérico de tipo Int. No puede ser nulo y debe contener 9 números.
 
-Dirección: cadena de texto. Indica dónde reside el usuario. No puede ser nulo.
+- Dirección: cadena de texto. Indica dónde reside el usuario. No puede ser nulo.
 
-Roles: cadena de texto: Roles del usuario. Puede ser USER o ADMIN. No puede ser nulo.
+- Roles: cadena de texto: Roles del usuario. Puede ser USER o ADMIN. No puede ser nulo.
 
-Tabla Producto:
 
-Identificador del producto: dato numérico tipo Long. Se generará automáticamente al crear un producto. No puede ser nulo.
+**Tabla Producto:**
 
-Nombre: cadena de texto. Nombre del producto, que especificará verdaderamente el tipo de producto que es, como por ejemplo, “Camiseta”, “Juego de cubertería”, etc. No puede ser nulo.
+- Identificador del producto: dato numérico tipo Long. Se generará automáticamente al crear un producto. No puede ser nulo.
 
-Categoría: cadena de texto. Especifica la categoría del producto. Importante a la hora de realizar búsquedas. No puede ser nulo y no podrá contener una categoría que no existe.
+- Nombre: cadena de texto. Nombre del producto, que especificará verdaderamente el tipo de producto que es, como por ejemplo, “Camiseta”, “Juego de cubertería”, etc. No puede ser nulo.
 
-Stock: dato numérico tipo Int. Indica la cantidad disponible del producto. No puede ser nulo ni menor que 0.
+- Categoría: cadena de texto. Especifica la categoría del producto. Importante a la hora de realizar búsquedas. No puede ser nulo y no podrá contener una categoría que no existe.
 
-Precio: dato numérico tipo Double. Hace referencia al importe de una unidad del producto. No puede ser nulo ni menor que 0.
+- Stock: dato numérico tipo Int. Indica la cantidad disponible del producto. No puede ser nulo ni menor que 0.
 
-Descripción: cadena de texto. Describe el producto.
+- Precio: dato numérico tipo Double. Hace referencia al importe de una unidad del producto. No puede ser nulo ni menor que 0.
 
-Tabla Pedido:
+- Descripción: cadena de texto. Describe el producto.
 
-Identificador del pedido: dato numérico de tipo Long. Se generará automáticamente al crear un pedido. No puede ser nulo.
 
-Destino: cadena de texto. Indica la dirección del pedido. No puede ser nulo.
+**Tabla Pedido:**
 
-Fecha Pedido: fecha tipo Date. Indica la fecha en la que se ha realizado la compra online. La fecha no puede ser nula y debe tener formato “YYYY-MM-DD”.
+- Identificador del pedido: dato numérico de tipo Long. Se generará automáticamente al crear un pedido. No puede ser nulo.
 
-Fecha Llegada: fecha tipo Date. Indica la fecha en la que está estipulada la llegada al destino. La fecha no puede ser nula y debe tener formato “YYYY-MM-DD”.
+- Destino: cadena de texto. Indica la dirección del pedido. No puede ser nulo.
 
-Importe: dato numérico tipo Double. Indica el precio del total del pedido. No puede ser nulo.
+- Fecha Pedido: fecha tipo Date. Indica la fecha en la que se ha realizado la compra online. La fecha no puede ser nula y debe tener formato “YYYY-MM-DD”.
 
-Estado: booleano. Indica si el pedido está en curso o ya se ha realizado. No puede ser nulo.
+- Fecha Llegada: fecha tipo Date. Indica la fecha en la que está estipulada la llegada al destino. La fecha no puede ser nula y debe tener formato “YYYY-MM-DD”.
+
+- Importe: dato numérico tipo Double. Indica el precio del total del pedido. No puede ser nulo.
+
+- Estado: booleano. Indica si el pedido está en curso o ya se ha realizado. No puede ser nulo.
 
 
 #### Diagrama Entidad / Relación:

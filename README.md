@@ -162,7 +162,7 @@ Un usuario puede realizar muchos pedidos y en cada pedido pueden ir incluidos mu
             - 404: NOT FOUND, no se ha encontrado al usuario.
 
 
- 3. **Operaciones de Productos:**
+ 2. **Operaciones de Productos:**
     
     RUTAS PROTEGIDAS: requiere que el usuario esté autenticado para acceder al recurso.
 

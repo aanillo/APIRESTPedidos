@@ -1,6 +1,7 @@
 package com.es.apiPedidos.utils.mapper;
 
 import com.es.apiPedidos.dto.UsuarioDTO;
+import com.es.apiPedidos.dto.UsuarioRegisterDTO;
 import com.es.apiPedidos.model.Usuario;
 import org.springframework.stereotype.Component;
 
@@ -15,6 +16,17 @@ public class UsuarioMapper {
                 usuario.getEmail(),
                 usuario.getDireccion(),
                 roles
+        );
+    }
+
+    public static UsuarioRegisterDTO entityToRegisterDto(Usuario usuario) {
+        return new UsuarioRegisterDTO(
+                usuario.getUsername(),
+                usuario.getPassword(),
+                usuario.getPassword(),
+                usuario.getEmail(),
+                usuario.getDireccion(),
+                usuario.getRoles()
         );
     }
 }

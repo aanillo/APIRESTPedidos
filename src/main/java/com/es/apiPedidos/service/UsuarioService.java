@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -120,4 +121,83 @@ public class UsuarioService implements UserDetailsService {
         }
         return usDtos;
     }
+
+    public UsuarioRegisterDTO updateUser(String username, UsuarioRegisterDTO usuarioDTO) {
+        if (usuarioDTO == null) {
+            throw new BadRequestException("Los datos del usuario no pueden ser nulos");
+        }
+
+
+        Usuario usuarioExistente = usuarioRepository.findByUsername(username)
+                .orElseThrow(() -> new NotFoundException("Usuario no encontrado"));
+
+        String error;
+
+
+        if (usuarioDTO.getUsername() != null && !usuarioDTO.getUsername().equals(usuarioExistente.getUsername())) {
+            if (usuarioRepository.findByUsername(usuarioDTO.getUsername()).isPresent()) {
+                throw new DuplicateException("El nombre de usuario ya existe");
+            }
+            error = UsuarioValidate.isValidUsername(usuarioDTO.getUsername());
+            if (!error.isEmpty()) {
+                throw new BadRequestException(error);
+            }
+            usuarioExistente.setUsername(usuarioDTO.getUsername());
+        }
+
+
+        if (usuarioDTO.getPassword1() != null || usuarioDTO.getPassword2() != null) {
+            if (usuarioDTO.getPassword1() == null || usuarioDTO.getPassword2() == null ||
+                    !usuarioDTO.getPassword1().equals(usuarioDTO.getPassword2())) {
+                throw new BadRequestException("Ambas contraseñas deben ser iguales y no nulas");
+            }
+            error = UsuarioValidate.isValidPassword(usuarioDTO.getPassword1());
+            if (!error.isEmpty()) {
+                throw new BadRequestException(error);
+            }
+            usuarioExistente.setPassword(passwordEncoder.encode(usuarioDTO.getPassword1()));
+        }
+
+
+        if (usuarioDTO.getEmail() != null && !usuarioDTO.getEmail().equals(usuarioExistente.getEmail())) {
+            error = UsuarioValidate.isValidEmail(usuarioDTO.getEmail());
+            if (!error.isEmpty()) {
+                throw new BadRequestException(error);
+            }
+            usuarioExistente.setEmail(usuarioDTO.getEmail());
+        }
+
+
+        if (usuarioDTO.getDireccion() != null && !usuarioDTO.getDireccion().equals(usuarioExistente.getDireccion())) {
+            error = UsuarioValidate.isValidDireccion(usuarioDTO.getDireccion());
+            if (!error.isEmpty()) {
+                throw new BadRequestException(error);
+            }
+            usuarioExistente.setDireccion(usuarioDTO.getDireccion());
+        }
+
+        if (usuarioDTO.getRoles() != null && !usuarioDTO.getRoles().isEmpty()) {
+            usuarioExistente.setRoles(usuarioDTO.getRoles());
+        }
+
+        usuarioRepository.save(usuarioExistente);
+
+        return usuarioMapper.entityToRegisterDto(usuarioExistente);
+    }
+
+
+
+    public UsuarioDTO delete(String username) {
+        if (username == null || username.isEmpty()) {
+            throw new BadRequestException("El nombre de usuario no puede ser nulo o vacío");
+        }
+
+        Usuario usuarioExistente = usuarioRepository.findByUsername(username)
+                .orElseThrow(() -> new NotFoundException("Usuario no encontrado"));
+
+        UsuarioDTO usuarioDTO = usuarioMapper.entityToDto(usuarioExistente);
+        usuarioRepository.delete(usuarioExistente);
+        return usuarioDTO;
+    }
+
 }

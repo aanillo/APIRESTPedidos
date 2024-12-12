@@ -38,14 +38,14 @@ public class ProductoController {
 
 
     @GetMapping("/{nombre}")
-    public ResponseEntity<ProductoDTO> getByName(
-            @PathVariable String nombre
+    public ResponseEntity<ProductoDTO> getById(
+            @PathVariable String id
     ) {
-        if(nombre == null) {
-            throw new BadRequestException("Nombre no válido");
+        if(id == null) {
+            throw new BadRequestException("Id no válida");
         }
 
-        ProductoDTO productoDTO = productoService.getByName(nombre);
+        ProductoDTO productoDTO = productoService.getById(id);
 
         if(productoDTO == null) {
             throw new NotFoundException("Producto no encontrado");
@@ -62,5 +62,41 @@ public class ProductoController {
             throw new NotFoundException("No se han encontrado elementos");
         }
         return ResponseEntity.ok(productos);
+    }
+
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ProductoDTO> update(
+            @PathVariable String id, @RequestBody ProductoDTO productoDTO
+    ) {
+        if(id == null || id.isEmpty()) {
+            throw new BadRequestException("El producto y su id no pueden ser nulos");
+        }
+
+        ProductoDTO productoActualizado = productoService.update(id, productoDTO);
+
+        if(productoActualizado == null) {
+            throw new NotFoundException("Producto no encontrado");
+        }
+
+        return ResponseEntity.ok(productoActualizado);
+    }
+
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ProductoDTO> delete(
+        @PathVariable String id
+    ) {
+        if(id == null || id.isEmpty()) {
+            throw new BadRequestException("La id del producto no puede ser nula");
+        }
+
+        ProductoDTO productoEliminado = productoService.delete(id);
+
+        if(productoEliminado == null) {
+            throw new NotFoundException("Producto no encontrado");
+        }
+
+        return new ResponseEntity<ProductoDTO>(productoEliminado, HttpStatus.NO_CONTENT);
     }
 }

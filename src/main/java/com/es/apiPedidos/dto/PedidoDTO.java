@@ -12,11 +12,11 @@ public class PedidoDTO {
     private Date fechaLlgada;
     private double importe;
     private Usuario usuario;
-    private List<Producto> productos;
+    private List<String> productos;
 
     public PedidoDTO() {}
 
-    public PedidoDTO(String destino, Date fechaPedido, Date fechaLlgada, double importe, Usuario usuario, List<Producto> productos) {
+    public PedidoDTO(String destino, Date fechaPedido, Date fechaLlgada, double importe, Usuario usuario, List<String> productos) {
         this.destino = destino;
         this.fechaPedido = fechaPedido;
         this.fechaLlgada = fechaLlgada;
@@ -65,11 +65,11 @@ public class PedidoDTO {
         this.usuario = usuario;
     }
 
-    public List<Producto> getProductos() {
+    public List<String> getProductos() {
         return productos;
     }
 
-    public void setProductos(List<Producto> productos) {
+    public void setProductos(List<String> productos) {
         this.productos = productos;
     }
 }

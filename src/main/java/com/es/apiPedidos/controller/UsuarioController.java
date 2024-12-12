@@ -3,6 +3,7 @@ package com.es.apiPedidos.controller;
 import com.es.apiPedidos.dto.UsuarioDTO;
 import com.es.apiPedidos.dto.UsuarioLoginDTO;
 import com.es.apiPedidos.dto.UsuarioRegisterDTO;
+import com.es.apiPedidos.error.exception.BadRequestException;
 import com.es.apiPedidos.error.exception.GenericInternalException;
 import com.es.apiPedidos.error.exception.NotFoundException;
 import com.es.apiPedidos.error.exception.UnauthorizedException;
@@ -73,7 +74,8 @@ public class UsuarioController {
 
 
     @GetMapping("/{nombre}")
-    public ResponseEntity<UsuarioDTO> findByNombre(@PathVariable String nombre, Authentication authentication, Principal principal) {
+    public ResponseEntity<UsuarioDTO> findByNombre(
+            @PathVariable String nombre, Authentication authentication, Principal principal) {
 
 
         if(authentication.getAuthorities()
@@ -88,5 +90,38 @@ public class UsuarioController {
     }
 
 
+    @PutMapping("/{nombre}")
+    public ResponseEntity<UsuarioRegisterDTO> update(
+        @PathVariable String username, @RequestBody UsuarioRegisterDTO usuarioDTO
+    ) {
+        if(username == null || username.isEmpty() || usuarioDTO == null) {
+            throw new BadRequestException("El username o el usuario son nulos");
+        }
 
+        UsuarioRegisterDTO usuarioActualizado = usuarioService.updateUser(username, usuarioDTO);
+
+        if(usuarioActualizado == null) {
+            throw new NotFoundException("Usuario no encontrado");
+        }
+
+        return ResponseEntity.ok(usuarioActualizado);
+    }
+
+
+    @DeleteMapping("/{nombre}")
+    public ResponseEntity<UsuarioDTO> delete(
+            @PathVariable String username
+    ) {
+        if(username == null || username.isEmpty()) {
+            throw new BadRequestException("La id del seguro no puede ser nula");
+        }
+
+        UsuarioDTO usuarioEliminado = usuarioService.delete(username);
+
+        if(usuarioEliminado == null) {
+            throw new NotFoundException("Usuario no encontrado");
+        }
+
+        return new ResponseEntity<UsuarioDTO>(usuarioEliminado, HttpStatus.NO_CONTENT);
+    }
 }

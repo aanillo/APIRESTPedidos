@@ -49,9 +49,16 @@ public class ProductoService {
         return prodDTO;
     }
 
-    public ProductoDTO getByName(String nombre) {
+    public ProductoDTO getById(String id) {
+        Long idL = 0L;
+        try {
+            idL = Long.parseLong(id);
+        } catch (NumberFormatException e) {
+            throw new NumberFormatException("El formato del id es incorrecto");
+        }
+
         Producto producto = productoRepository
-                .findByNombre(nombre)
+                .findById(idL)
                 .orElseThrow(() -> new NotFoundException("No se ha encontrado producto con el nombre indicado"));
 
         if(producto == null) {
@@ -74,4 +81,73 @@ public class ProductoService {
     }
 
 
+    public ProductoDTO update(String id, ProductoDTO productoDTO) {
+        if(productoDTO == null) {
+            throw new NotFoundException("El producto no se ha encontrado");
+        }
+
+        Long idL = 0L;
+        try {
+            idL = Long.parseLong(id);
+        } catch (NumberFormatException e) {
+            throw new NumberFormatException("El formato del id es incorrecto: debe ser numérico.");
+        }
+
+        Producto productoExistente = productoRepository.findById(idL)
+                .orElseThrow(() -> new NotFoundException("No se ha encontrado el producto con dicha id"));
+
+        String error;
+
+        if (productoDTO.getNombre() != null && !productoDTO.getNombre().isEmpty()) {
+            error = ProductoValidate.isValidName(productoDTO.getNombre());
+            if (!error.isEmpty()) {
+                throw new BadRequestException(error);
+            }
+            productoExistente.setNombre(productoDTO.getNombre());
+        }
+
+        if (productoDTO.getCategoria() != null && !productoDTO.getCategoria().isEmpty()) {
+            error = ProductoValidate.isValidCategory(productoDTO.getCategoria());
+            if (!error.isEmpty()) {
+                throw new BadRequestException(error);
+            }
+            productoExistente.setCategoria(productoDTO.getCategoria());
+        }
+
+        if (productoDTO.getStock() < 0) {
+            error = ProductoValidate.isValidStock(productoDTO.getStock());
+            if (!error.isEmpty()) {
+                throw new BadRequestException(error);
+            }
+            productoExistente.setStock(productoDTO.getStock());
+        }
+
+        if (productoDTO.getPrecio() <= 0) {
+            error = ProductoValidate.isValidPrice(productoDTO.getPrecio());
+            if (!error.isEmpty()) {
+                throw new BadRequestException(error);
+            }
+            productoExistente.setPrecio(productoDTO.getPrecio());
+        }
+
+        Producto productoGuardado =  productoRepository.save(productoExistente);
+        return ProductoMapper.entityToDTO(productoGuardado);
+    }
+
+
+    public ProductoDTO delete(String id) {
+        Long idL = 0L;
+        try {
+            idL = Long.parseLong(id);
+        } catch (NumberFormatException e) {
+            throw new NumberFormatException("El formato del id es incorrecto");
+        }
+
+        Producto productoExistente = productoRepository.findById(idL)
+                .orElseThrow(() -> new NotFoundException("Producto no encontrado"));
+
+        ProductoDTO productoDTO = ProductoMapper.entityToDTO(productoExistente);
+        productoRepository.deleteById(idL);
+        return productoDTO;
+    }
 }

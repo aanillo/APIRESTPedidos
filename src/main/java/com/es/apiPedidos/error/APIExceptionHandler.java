@@ -38,16 +38,30 @@ public class APIExceptionHandler {
     }
 
     @ExceptionHandler(ForbiddenException.class)
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
     @ResponseBody
     public ErrorMessage handleForbidden(HttpServletRequest request, Exception e) {
         return new ErrorMessage(e.getMessage(), request.getRequestURI());
     }
 
+    @ExceptionHandler(DuplicateException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ResponseBody
+    public ErrorMessage handleDuplicate(HttpServletRequest request, Exception e) {
+        return new ErrorMessage(e.getMessage(), request.getRequestURI());
+    }
+
     @ExceptionHandler(InternalServerError.class)
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ResponseBody
     public ErrorMessage handleInternalServer(HttpServletRequest request, Exception e) {
+        return new ErrorMessage(e.getMessage(), request.getRequestURI());
+    }
+
+    @ExceptionHandler(GenericInternalException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseBody
+    public ErrorMessage handleGeneric(HttpServletRequest request, Exception e) {
         return new ErrorMessage(e.getMessage(), request.getRequestURI());
     }
 }

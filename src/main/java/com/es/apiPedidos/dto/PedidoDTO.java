@@ -9,17 +9,17 @@ import java.util.List;
 public class PedidoDTO {
     private String destino;
     private Date fechaPedido;
-    private Date fechaLlgada;
+    private Date fechaLlegada;
     private double importe;
     private Usuario usuario;
     private List<String> productos;
 
     public PedidoDTO() {}
 
-    public PedidoDTO(String destino, Date fechaPedido, Date fechaLlgada, double importe, Usuario usuario, List<String> productos) {
+    public PedidoDTO(String destino, Date fechaPedido, Date fechaLlegada, double importe, Usuario usuario, List<String> productos) {
         this.destino = destino;
         this.fechaPedido = fechaPedido;
-        this.fechaLlgada = fechaLlgada;
+        this.fechaLlegada = fechaLlegada;
         this.importe = importe;
         this.usuario = usuario;
         this.productos = productos;
@@ -41,12 +41,12 @@ public class PedidoDTO {
         this.fechaPedido = fechaPedido;
     }
 
-    public Date getFechaLlgada() {
-        return fechaLlgada;
+    public Date getFechaLlegada() {
+        return fechaLlegada;
     }
 
-    public void setFechaLlgada(Date fechaLlgada) {
-        this.fechaLlgada = fechaLlgada;
+    public void setFechaLlegada(Date fechaLlegada) {
+        this.fechaLlegada = fechaLlegada;
     }
 
     public double getImporte() {

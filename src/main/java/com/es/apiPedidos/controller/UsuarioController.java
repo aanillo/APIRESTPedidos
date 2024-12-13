@@ -42,7 +42,7 @@ public class UsuarioController {
         Authentication authentication = null;
         try {
             authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(usuarioLoginDTO.getUsername(), usuarioLoginDTO.getPassword())// modo de autenticación
+                    new UsernamePasswordAuthenticationToken(usuarioLoginDTO.getUsername(), usuarioLoginDTO.getPassword())
             );
         } catch (Exception e) {
             System.out.println("Excepcion en authentication");
@@ -73,7 +73,7 @@ public class UsuarioController {
     }
 
 
-    @GetMapping("/{nombre}")
+    @GetMapping("/{username}")
     public ResponseEntity<UsuarioDTO> findByNombre(
             @PathVariable String nombre, Authentication authentication, Principal principal) {
 
@@ -90,7 +90,7 @@ public class UsuarioController {
     }
 
 
-    @PutMapping("/{nombre}")
+    @PutMapping("/{username}")
     public ResponseEntity<UsuarioRegisterDTO> update(
         @PathVariable String username, @RequestBody UsuarioRegisterDTO usuarioDTO
     ) {
@@ -108,7 +108,7 @@ public class UsuarioController {
     }
 
 
-    @DeleteMapping("/{nombre}")
+    @DeleteMapping("/{username}")
     public ResponseEntity<UsuarioDTO> delete(
             @PathVariable String username
     ) {

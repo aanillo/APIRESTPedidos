@@ -10,7 +10,7 @@ public class ProductoMapper {
     public static ProductoDTO entityToDTO(Producto producto) {
         ProductoDTO productoDTO = new ProductoDTO();
         productoDTO.setNombre(producto.getNombre());
-        productoDTO.setCategoria(producto.getNombre());
+        productoDTO.setCategoria(producto.getCategoria());
         productoDTO.setStock(producto.getStock());
         productoDTO.setPrecio(producto.getPrecio());
         productoDTO.setDescripcion(producto.getDescripcion());

@@ -13,13 +13,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/controller")
+@RequestMapping("/productos")
 public class ProductoController {
 
     @Autowired
     private ProductoService productoService;
 
-    @PostMapping("")
+    @PostMapping("/")
     public ResponseEntity<ProductoDTO> insert(
             @RequestBody ProductoDTO productoDTO
     ) {
@@ -37,7 +37,7 @@ public class ProductoController {
     }
 
 
-    @GetMapping("/{nombre}")
+    @GetMapping("/{id}")
     public ResponseEntity<ProductoDTO> getById(
             @PathVariable String id
     ) {

@@ -64,4 +64,11 @@ public class APIExceptionHandler {
     public ErrorMessage handleGeneric(HttpServletRequest request, Exception e) {
         return new ErrorMessage(e.getMessage(), request.getRequestURI());
     }
+
+    @ExceptionHandler(NoContentException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseBody
+    public ErrorMessage handleNoContent(HttpServletRequest request, Exception e) {
+        return new ErrorMessage(e.getMessage(), request.getRequestURI());
+    }
 }

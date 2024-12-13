@@ -16,7 +16,7 @@ public class PedidoMapper {
         PedidoDTO pedidoDTO = new PedidoDTO();
         pedidoDTO.setDestino(pedido.getDestino());
         pedidoDTO.setFechaPedido(pedido.getFechaPedido());
-        pedidoDTO.setFechaLlgada(pedido.getFechaLlegada());
+        pedidoDTO.setFechaLlegada(pedido.getFechaLlegada());
         pedidoDTO.setImporte(pedido.getImporte());
         pedidoDTO.setUsuario(pedido.getUsuario() != null ? pedido.getUsuario() : null);
         pedidoDTO.setProductos(pedido.getProductos()
@@ -32,7 +32,7 @@ public class PedidoMapper {
         Pedido pedido = new Pedido();
         pedido.setDestino(pedidoDTO.getDestino());
         pedido.setFechaPedido(pedidoDTO.getFechaPedido());
-        pedido.setFechaLlegada(pedidoDTO.getFechaLlgada());
+        pedido.setFechaLlegada(pedidoDTO.getFechaLlegada());
         pedido.setImporte(pedidoDTO.getImporte());
         pedido.setUsuario(usuario);
         pedido.setProductos(productos);

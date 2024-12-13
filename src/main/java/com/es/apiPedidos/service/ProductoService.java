@@ -61,12 +61,9 @@ public class ProductoService {
                 .findById(idL)
                 .orElseThrow(() -> new NotFoundException("No se ha encontrado producto con el nombre indicado"));
 
-        if(producto == null) {
-            throw new BadRequestException("El producto no puede ser nulo");
-        } else {
-            ProductoDTO productoDTO = ProductoMapper.entityToDTO(producto);
-            return productoDTO;
-        }
+
+        ProductoDTO prodDTO = ProductoMapper.entityToDTO(producto);
+        return prodDTO;
     }
 
     public List<ProductoDTO> getAllProducts() {
@@ -114,7 +111,7 @@ public class ProductoService {
             productoExistente.setCategoria(productoDTO.getCategoria());
         }
 
-        if (productoDTO.getStock() < 0) {
+        if (productoDTO.getStock() >= 0) {
             error = ProductoValidate.isValidStock(productoDTO.getStock());
             if (!error.isEmpty()) {
                 throw new BadRequestException(error);
@@ -122,7 +119,7 @@ public class ProductoService {
             productoExistente.setStock(productoDTO.getStock());
         }
 
-        if (productoDTO.getPrecio() <= 0) {
+        if (productoDTO.getPrecio() > 0) {
             error = ProductoValidate.isValidPrice(productoDTO.getPrecio());
             if (!error.isEmpty()) {
                 throw new BadRequestException(error);

@@ -1,6 +1,7 @@
 package com.es.apiPedidos.controller;
 
 import com.es.apiPedidos.dto.PedidoDTO;
+import com.es.apiPedidos.dto.UsuarioDTO;
 import com.es.apiPedidos.error.exception.BadRequestException;
 import com.es.apiPedidos.error.exception.InternalServerError;
 import com.es.apiPedidos.error.exception.NoContentException;
@@ -50,7 +51,7 @@ public class PedidoController {
     }
 
 
-    @GetMapping("/{username}")
+    @GetMapping("/byUsuario/{username}")
     public ResponseEntity<List<PedidoDTO>> getByUser(
             @PathVariable String username
     ) {

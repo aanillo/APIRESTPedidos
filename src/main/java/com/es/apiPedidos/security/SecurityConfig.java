@@ -41,23 +41,18 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/usuarios/login", "/usuarios/register").permitAll()
                         .requestMatchers(HttpMethod.GET, "/usuarios/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/usuarios/byUsername/{username}").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/usuarios/{username}").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/usuarios/{username}**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/usuarios/{username}").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/productos/**").authenticated()
                         .requestMatchers(HttpMethod.GET, "/productos/{id}").authenticated()
                         .requestMatchers(HttpMethod.POST, "/productos/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/productos/{id}").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/productos/{id}").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/pedidos/{id}").authenticated()
-                        /*.requestMatchers(HttpMethod.GET, "/pedidos/{id}").access((authentication, context) -> {
-                            String username = context.getRequest().getParameter("username");
-                            return username != null && username.equals(authentication.getName());
-                        })*/
-                        .requestMatchers(HttpMethod.GET, "/pedidos/").hasRole("ADMIN")
-                        /*.requestMatchers(HttpMethod.GET, "/pedidos/{username}").access((authentication, context) -> {
-                            String username = context.getRequest().getParameter("username");
-                            return username != null && username.equals(authentication.getName());
-                        })*/
+                        .requestMatchers(HttpMethod.GET, "/pedidos/{id}").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/pedidos/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/pedidos/byUsuario/{username}").authenticated()
                         .requestMatchers(HttpMethod.PUT, "/pedidos/{id}").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/pedidos/{id}").hasRole("ADMIN")
                         .anyRequest().authenticated()

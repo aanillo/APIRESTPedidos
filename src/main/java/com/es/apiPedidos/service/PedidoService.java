@@ -34,7 +34,7 @@ public class PedidoService {
 
 
     public PedidoDTO insert(PedidoDTO pedidoDTO) {
-        Usuario usuario = usuarioRepository.findByUsername(pedidoDTO.getUsuario().getUsername())
+        Usuario usuario = usuarioRepository.findById(pedidoDTO.getIdUsuario())
                 .orElseThrow(() -> new NotFoundException("Usuario no encontrado"));
 
         List<Producto> productos = pedidoDTO.getProductos()
@@ -42,6 +42,10 @@ public class PedidoService {
                 .map(producto -> productoRepository.findById(Long.valueOf(producto))
                         .orElseThrow(() -> new NotFoundException("Producto no encontrado: " + producto)))
                 .toList();
+
+        if (pedidoDTO.getProductos() == null || pedidoDTO.getProductos().isEmpty()) {
+            throw new BadRequestException("El pedido debe contener al menos un producto.");
+        }
 
         String error;
 

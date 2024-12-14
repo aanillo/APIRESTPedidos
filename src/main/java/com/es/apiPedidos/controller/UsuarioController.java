@@ -1,12 +1,10 @@
 package com.es.apiPedidos.controller;
 
+import com.es.apiPedidos.dto.PedidoDTO;
 import com.es.apiPedidos.dto.UsuarioDTO;
 import com.es.apiPedidos.dto.UsuarioLoginDTO;
 import com.es.apiPedidos.dto.UsuarioRegisterDTO;
-import com.es.apiPedidos.error.exception.BadRequestException;
-import com.es.apiPedidos.error.exception.GenericInternalException;
-import com.es.apiPedidos.error.exception.NotFoundException;
-import com.es.apiPedidos.error.exception.UnauthorizedException;
+import com.es.apiPedidos.error.exception.*;
 import com.es.apiPedidos.service.TokenService;
 import com.es.apiPedidos.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +18,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 
 @RestController
 @RequestMapping("/usuarios")
@@ -73,7 +72,7 @@ public class UsuarioController {
     }
 
 
-    @GetMapping("/{username}")
+    @GetMapping("/byUsername/{username}")
     public ResponseEntity<UsuarioDTO> findByNombre(
             @PathVariable String nombre, Authentication authentication, Principal principal) {
 
@@ -87,6 +86,18 @@ public class UsuarioController {
             throw new UnauthorizedException("No tienes los permisos para acceder al recurso");
         }
 
+    }
+
+
+    @GetMapping("/")
+    public ResponseEntity<List<UsuarioDTO>> getAllUsers(
+    ) {
+        List<UsuarioDTO> usuarios = usuarioService.getAll();
+        if(usuarios.isEmpty()) {
+            throw new NoContentException("No hay elementos en la lista");
+        }
+
+        return ResponseEntity.ok(usuarios);
     }
 
 

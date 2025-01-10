@@ -39,13 +39,27 @@ public class PedidoService {
 
         List<Producto> productos = pedidoDTO.getProductos()
                 .stream()
-                .map(producto -> productoRepository.findById(Long.valueOf(producto))
-                        .orElseThrow(() -> new NotFoundException("Producto no encontrado: " + producto)))
+                .map(productoId -> {
+                    Producto producto = productoRepository.findById(Long.valueOf(productoId))
+                        .orElseThrow(() -> new NotFoundException("Producto no encontrado: " + productoId));
+
+                    if(producto.getStock() <= 0) {
+                        throw new BadRequestException("Producto sin stock disponible");
+                    }
+
+                    producto.setStock(producto.getStock() - 1);
+                    productoRepository.save(producto);
+                    return producto;
+                })
                 .toList();
 
         if (pedidoDTO.getProductos() == null || pedidoDTO.getProductos().isEmpty()) {
             throw new BadRequestException("El pedido debe contener al menos un producto.");
         }
+
+        double importeTotal = productos.stream()
+                .mapToDouble(Producto::getPrecio)
+                .sum();
 
         String error;
 
@@ -64,12 +78,9 @@ public class PedidoService {
             throw new BadRequestException(error);
         }
 
-        error = PedidoValidate.isValidAmount(pedidoDTO.getImporte());
-        if (!error.isEmpty()) {
-            throw new BadRequestException(error);
-        }
 
         Pedido pedido = PedidoMapper.DtoToEntity(pedidoDTO, usuario, productos);
+        pedido.setImporte(importeTotal);
         pedidoRepository.save(pedido);
         PedidoDTO pedDto = PedidoMapper.entityToDto(pedido);
         return pedDto;
@@ -107,9 +118,7 @@ public class PedidoService {
         Usuario usuario = usuarioRepository.findByUsername(username)
                 .orElseThrow(() -> new NotFoundException("Usuario no encontrado"));
 
-
         List<Pedido> pedidos = pedidoRepository.findByUsuario(usuario).stream().toList();
-
 
         List<PedidoDTO> pedidosDTO = pedidos.stream()
                 .map(PedidoMapper::entityToDto)
@@ -160,12 +169,28 @@ public class PedidoService {
             pedidoExistente.setFechaLlegada(pedidoDTO.getFechaLlegada());
         }
 
-        if(pedidoDTO.getImporte() > 0){
-            error = PedidoValidate.isValidAmount(pedidoDTO.getImporte());
-            if(!error.isEmpty()){
-                throw new BadRequestException(error);
-            }
-            pedidoExistente.setImporte(pedidoDTO.getImporte());
+        if(pedidoDTO.getProductos() != null && !pedidoDTO.getProductos().isEmpty()) {
+            List<Producto> productos = pedidoDTO.getProductos().stream()
+                    .map(productoId -> {
+                        Producto producto = productoRepository.findById(Long.valueOf(productoId))
+                                .orElseThrow(() -> new NotFoundException("Producto no encontrado"));
+
+                        if(producto.getStock() <= 0) {
+                            throw new BadRequestException("Producto sin stock disponible");
+                        }
+
+                        producto.setStock(producto.getStock() - 1);
+                        productoRepository.save(producto);
+                        return producto;
+                    })
+                    .toList();
+
+            pedidoExistente.setProductos(productos);
+
+            double importeTotal = productos.stream()
+                    .mapToDouble(Producto::getPrecio)
+                    .sum();
+            pedidoExistente.setImporte(importeTotal);
         }
 
         Pedido pedidoGuardado =  pedidoRepository.save(pedidoExistente);
